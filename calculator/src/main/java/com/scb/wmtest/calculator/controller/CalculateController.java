@@ -48,7 +48,7 @@ public class CalculateController {
     @GetMapping("/calculate")
     @Operation(
         summary = "Perform calculation using query parameters",
-        description = "Performs mathematical operations (sum, subtract, multiply, divide) on two integers"
+        description = "Performs mathematical operations on two numbers. Supports basic operations (sum, subtract, multiply, divide) and scientific operations (power, percentage)"
     )
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Calculation successful",
@@ -61,21 +61,50 @@ public class CalculateController {
             @RequestParam @NotBlank(message = "Action cannot be blank") String action,
             
             @Parameter(description = "First operand", example = "10", required = true)
-            @RequestParam @NotNull(message = "First value cannot be null") Integer val1,
+            @RequestParam @NotNull(message = "First value cannot be null") Double val1,
             
             @Parameter(description = "Second operand", example = "5", required = true)
-            @RequestParam @NotNull(message = "Second value cannot be null") Integer val2) {
+            @RequestParam @NotNull(message = "Second value cannot be null") Double val2) {
         
         logger.info("Received calculation request: action={}, val1={}, val2={}", action, val1, val2);
         
-        // Validate input
-        calculateService.validateInput(action, val1, val2);
-        
         // Perform calculation
-        int result = calculateService.performAction(action, val1, val2);
+        double result = calculateService.performAction(action, val1, val2);
         
         CalculateResponse response = new CalculateResponse("1.0", new Params(action), new Data(result));
         logger.info("Calculation completed successfully: {} {} {} = {}", val1, action, val2, result);
+        
+        return ResponseEntity.ok(response);
+    }
+
+    /**
+     * Calculate single operand operations
+     */
+    @GetMapping("/calculate/single")
+    @Operation(
+        summary = "Perform single operand calculation",
+        description = "Performs mathematical operations on a single number. Supports scientific operations (sqrt, square, cube, sin, cos, tan, log, ln, abs, factorial, reciprocal)"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Calculation successful",
+            content = @Content(schema = @Schema(implementation = CalculateResponse.class))),
+        @ApiResponse(responseCode = "400", description = "Invalid input or operation"),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<CalculateResponse> calculateSingle(
+            @Parameter(description = "Mathematical operation", example = "sqrt", required = true)
+            @RequestParam @NotBlank(message = "Action cannot be blank") String action,
+            
+            @Parameter(description = "Operand", example = "16", required = true)
+            @RequestParam @NotNull(message = "Value cannot be null") Double val) {
+        
+        logger.info("Received single calculation request: action={}, val={}", action, val);
+        
+        // Perform calculation
+        double result = calculateService.performSingleAction(action, val);
+        
+        CalculateResponse response = new CalculateResponse("1.0", new Params(action), new Data(result));
+        logger.info("Single calculation completed successfully: {} {} = {}", action, val, result);
         
         return ResponseEntity.ok(response);
     }
@@ -100,11 +129,8 @@ public class CalculateController {
         
         logger.info("Received calculation request: {}", request);
         
-        // Validate input
-        calculateService.validateInput(request.getAction(), request.getVal1(), request.getVal2());
-        
         // Perform calculation
-        int result = calculateService.performAction(request.getAction(), request.getVal1(), request.getVal2());
+        double result = calculateService.performAction(request.getAction(), request.getVal1(), request.getVal2());
         
         CalculateResponse response = new CalculateResponse("1.0", new Params(request.getAction()), new Data(result));
         logger.info("Calculation completed successfully: {} {} {} = {}", 
@@ -132,7 +158,10 @@ public class CalculateController {
     @ApiResponse(responseCode = "200", description = "List of supported operations")
     public ResponseEntity<String[]> getSupportedOperations() {
         logger.debug("Supported operations requested");
-        String[] operations = {"sum", "subtract", "multiply", "divide"};
+        String[] operations = {
+            "sum", "subtract", "multiply", "divide", "power", "percentage",
+            "sqrt", "square", "cube", "sin", "cos", "tan", "log", "ln", "abs", "factorial", "reciprocal"
+        };
         return ResponseEntity.ok(operations);
     }
 }

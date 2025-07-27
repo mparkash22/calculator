@@ -12,21 +12,21 @@ public class CalculateRequest {
     
     @Schema(description = "Mathematical operation to perform", example = "sum", required = true)
     @NotNull(message = "Action cannot be null")
-    @Pattern(regexp = "^(sum|subtract|multiply|divide)$", message = "Action must be one of: sum, subtract, multiply, divide")
+    @Pattern(regexp = "^(sum|subtract|multiply|divide|power|percentage)$", message = "Action must be one of: sum, subtract, multiply, divide, power, percentage")
     private String action;
     
-    @Schema(description = "First operand", example = "10", required = true)
+    @Schema(description = "First operand", example = "10.0", required = true)
     @NotNull(message = "First value cannot be null")
-    private Integer val1;
+    private Double val1;
     
-    @Schema(description = "Second operand", example = "5", required = true)
+    @Schema(description = "Second operand", example = "5.0", required = true)
     @NotNull(message = "Second value cannot be null")
-    private Integer val2;
+    private Double val2;
     
     public CalculateRequest() {
     }
     
-    public CalculateRequest(String action, Integer val1, Integer val2) {
+    public CalculateRequest(String action, Double val1, Double val2) {
         this.action = action;
         this.val1 = val1;
         this.val2 = val2;
@@ -40,19 +40,19 @@ public class CalculateRequest {
         this.action = action;
     }
     
-    public Integer getVal1() {
+    public Double getVal1() {
         return val1;
     }
     
-    public void setVal1(Integer val1) {
+    public void setVal1(Double val1) {
         this.val1 = val1;
     }
     
-    public Integer getVal2() {
+    public Double getVal2() {
         return val2;
     }
     
-    public void setVal2(Integer val2) {
+    public void setVal2(Double val2) {
         this.val2 = val2;
     }
 } 

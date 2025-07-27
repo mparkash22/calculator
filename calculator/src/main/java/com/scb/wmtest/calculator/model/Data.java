@@ -8,21 +8,21 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "Calculation result data")
 public class Data {
     
-    @Schema(description = "Calculation result", example = "15")
-    private int result;
+    @Schema(description = "Calculation result", example = "15.0")
+    private double result;
     
     public Data() {
     }
     
-    public Data(int result) {
+    public Data(double result) {
         this.result = result;
     }
     
-    public int getResult() {
+    public double getResult() {
         return result;
     }
     
-    public void setResult(int result) {
+    public void setResult(double result) {
         this.result = result;
     }
 }

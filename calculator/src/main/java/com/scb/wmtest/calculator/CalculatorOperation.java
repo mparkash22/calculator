@@ -4,10 +4,26 @@ package com.scb.wmtest.calculator;
  * Enum representing calculator operations
  */
 public enum CalculatorOperation {
+    // Basic operations
     SUM("sum"),
     DIVIDE("divide"),
     MULTIPLY("multiply"),
-    SUBTRACT("subtract");
+    SUBTRACT("subtract"),
+    
+    // Scientific operations
+    POWER("power"),
+    SQUARE_ROOT("sqrt"),
+    SQUARE("square"),
+    CUBE("cube"),
+    SIN("sin"),
+    COS("cos"),
+    TAN("tan"),
+    LOG("log"),
+    LN("ln"),
+    ABS("abs"),
+    FACTORIAL("factorial"),
+    PERCENTAGE("percentage"),
+    RECIPROCAL("reciprocal");
     
     private final String value;
     
