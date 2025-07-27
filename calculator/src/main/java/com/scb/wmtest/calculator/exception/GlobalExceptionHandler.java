@@ -1,4 +1,4 @@
-555558package com.scb.wmtest.calculator.exception;
+package com.scb.wmtest.calculator.exception;
 
 import com.scb.wmtest.calculator.model.ErrorResponse;
 import org.slf4j.Logger;
